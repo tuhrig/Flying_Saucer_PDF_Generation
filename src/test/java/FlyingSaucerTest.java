@@ -1,4 +1,3 @@
-import com.itextpdf.text.pdf.BaseFont;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.thymeleaf.TemplateEngine;
@@ -12,6 +11,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import static com.itextpdf.text.pdf.BaseFont.EMBEDDED;
+import static com.itextpdf.text.pdf.BaseFont.IDENTITY_H;
 import static org.thymeleaf.templatemode.TemplateMode.HTML;
 
 /**
@@ -63,7 +64,7 @@ public class FlyingSaucerTest {
         String xHtml = convertToXhtml(renderedHtmlContent);
 
         ITextRenderer renderer = new ITextRenderer();
-        renderer.getFontResolver().addFont("Code39.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        renderer.getFontResolver().addFont("Code39.ttf", IDENTITY_H, EMBEDDED);
         renderer.setDocumentFromString(xHtml);
         renderer.layout();
 
