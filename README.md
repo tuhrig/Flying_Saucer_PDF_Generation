@@ -14,3 +14,6 @@ The test will generate a PDF called:
 A copy of the generated PDF is checked-in, in case you want to see what is generated:
 
     example_of_generated_pdf.pdf        
+    
+    
+[logo]: screen_shot.png
