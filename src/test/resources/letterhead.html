@@ -1,0 +1,26 @@
+<div th:fragment="letterhead">
+    <table>
+        <tr class="address-block">
+            <td></td>
+            <td class="bottom right">
+                <strong>Thymeleaf Example Project</strong><br>
+                Thymeleaf Street 42<br>
+                12345 Thymecity<br>
+                <br>
+                <b>Phone:</b> 0100 1234 1111<br>
+                <b>E-Mail:</b> example@test.com<br>
+            </td>
+        </tr>
+        <tr class="address-block">
+            <td class="bottom">
+                <strong>[[${data.getFirstname()}]] [[${data.getLastname()}]]</strong><br>
+                [[${data.getStreet()}]]<br>
+                [[${data.getZipCode()}]] [[${data.getCity()}]]<br>
+            </td>
+            <td class="bottom right">
+                Thymecity, 01. January 2018
+            </td>
+        </tr>
+    </table>
+    <hr>
+</div>
