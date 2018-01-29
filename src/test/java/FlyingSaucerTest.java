@@ -1,4 +1,5 @@
 import com.itextpdf.text.pdf.BaseFont;
+import lombok.SneakyThrows;
 import org.junit.Test;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -10,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 
 import static org.thymeleaf.templatemode.TemplateMode.HTML;
 
@@ -55,19 +55,22 @@ public class FlyingSaucerTest {
         Context context = new Context();
         context.setVariable("data", data);
 
-        String htmlContent = templateEngine.process("template", context);
-        htmlContent = cleanData(htmlContent);
+        // Flying Saucer needs XHTML - not just normal HTML. To make our life
+        // easy, we use JTidy to convert the rendered Thymeleaf template to
+        // XHTML. Note that this might no work for very complicated HTML. But
+        // it's good enough for a simple letter.
+        String renderedHtmlContent = templateEngine.process("template", context);
+        String xHtml = convertToXhtml(renderedHtmlContent);
 
-        OutputStream os = new FileOutputStream(OUTPUT_FILE);
         ITextRenderer renderer = new ITextRenderer();
-
         renderer.getFontResolver().addFont("Code39.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
-        renderer.setDocumentFromString(htmlContent);
+        renderer.setDocumentFromString(xHtml);
         renderer.layout();
-        renderer.createPDF(os);
 
-        os.close();
+        // And finally, we create the PDF:
+        OutputStream outputStream = new FileOutputStream(OUTPUT_FILE);
+        renderer.createPDF(outputStream);
+        outputStream.close();
     }
 
     private Data exampleDataForJohnDoe() {
@@ -89,15 +92,15 @@ public class FlyingSaucerTest {
         private String city;
     }
 
-    private String cleanData(String data) throws UnsupportedEncodingException {
+    @SneakyThrows
+    private String convertToXhtml(String html) {
         Tidy tidy = new Tidy();
         tidy.setInputEncoding("UTF-8");
         tidy.setOutputEncoding("UTF-8");
         tidy.setXHTML(true);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(data.getBytes("UTF-8"));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(html.getBytes("UTF-8"));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         tidy.parseDOM(inputStream, outputStream);
         return outputStream.toString("UTF-8");
     }
-
 }
