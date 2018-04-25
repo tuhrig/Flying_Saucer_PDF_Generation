@@ -6,10 +6,9 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 import static com.itextpdf.text.pdf.BaseFont.EMBEDDED;
 import static com.itextpdf.text.pdf.BaseFont.IDENTITY_H;
@@ -65,7 +64,14 @@ public class FlyingSaucerTest {
 
         ITextRenderer renderer = new ITextRenderer();
         renderer.getFontResolver().addFont("Code39.ttf", IDENTITY_H, EMBEDDED);
-        renderer.setDocumentFromString(xHtml);
+
+        // FlyingSaucer has a working directory. If you run this test, the working directory
+        // will be the root folder of your project. However, all files (HTML, CSS, etc.) are
+        // located under "/src/test/resources". So we want to use this folder as the working
+        // directory.
+        Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+        String baseUrl = "file://" + path + "/src/test/resources/";
+        renderer.setDocumentFromString(xHtml, baseUrl);
         renderer.layout();
 
         // And finally, we create the PDF:

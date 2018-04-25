@@ -71,7 +71,7 @@ p {
 
 @font-face {
     font-family: "Bar-Code 39";
-    src: url(Code39.ttf) format('truetype');
+    src: url(../../../Code39.ttf) format('truetype');
 }
 
 .barcode {
