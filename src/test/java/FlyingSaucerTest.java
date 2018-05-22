@@ -6,7 +6,11 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
@@ -18,14 +22,15 @@ import static org.thymeleaf.templatemode.TemplateMode.HTML;
  * This is a JUnit test which will generate a PDF using Flying Saucer
  * and Thymeleaf templates. The PDF will display a letter styled with
  * CSS. The letter has two pages and will contain text and images.
- *
+ * <p>
  * Simply run this test to generate the PDF. The file is called:
- *
- *      /test.pdf
+ * <p>
+ * /test.pdf
  */
 public class FlyingSaucerTest {
 
     private static final String OUTPUT_FILE = "test.pdf";
+    private static final String UTF_8 = "UTF-8";
 
     @Test
     public void generatePdf() throws Exception {
@@ -38,7 +43,7 @@ public class FlyingSaucerTest {
         templateResolver.setPrefix("/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(HTML);
-        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setCharacterEncoding(UTF_8);
 
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
@@ -100,14 +105,15 @@ public class FlyingSaucerTest {
     }
 
     @SneakyThrows
-    private String convertToXhtml(String html) {
+    private String convertToXhtml(String html) throws UnsupportedEncodingException {
         Tidy tidy = new Tidy();
-        tidy.setInputEncoding("UTF-8");
-        tidy.setOutputEncoding("UTF-8");
+        tidy.setInputEncoding(UTF_8);
+        tidy.setOutputEncoding(UTF_8);
         tidy.setXHTML(true);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(html.getBytes("UTF-8"));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(html.getBytes(UTF_8));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         tidy.parseDOM(inputStream, outputStream);
-        return outputStream.toString("UTF-8");
+        return outputStream.toString(UTF_8);
     }
+
 }
