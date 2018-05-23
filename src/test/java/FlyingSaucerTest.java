@@ -6,13 +6,8 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.file.FileSystems;
-import java.nio.file.Path;
 
 import static com.itextpdf.text.pdf.BaseFont.EMBEDDED;
 import static com.itextpdf.text.pdf.BaseFont.IDENTITY_H;
@@ -74,8 +69,12 @@ public class FlyingSaucerTest {
         // will be the root folder of your project. However, all files (HTML, CSS, etc.) are
         // located under "/src/test/resources". So we want to use this folder as the working
         // directory.
-        Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
-        String baseUrl = "file://" + path + "/src/test/resources/";
+        String baseUrl = FileSystems
+                                .getDefault()
+                                .getPath("src", "test", "resources")
+                                .toUri()
+                                .toURL()
+                                .toString();
         renderer.setDocumentFromString(xHtml, baseUrl);
         renderer.layout();
 
