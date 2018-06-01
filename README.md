@@ -14,5 +14,7 @@ The test will generate a PDF called:
 A copy of the generated PDF is checked-in, in case you want to see what is generated:
 
     example_of_generated_pdf.pdf        
-    
+
+The project can be build with Gradle (using `build.gradle`) or Maven (using `pom.xml`).
+
 ![Image of PDF](screen_shot.png "Logo Title Text 1")

@@ -11,7 +11,6 @@ repositories {
 
 dependencies {
 
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.14'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
     compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.6.RELEASE'
     compile group: 'com.github.jknack', name: 'handlebars', version: '4.0.6'
