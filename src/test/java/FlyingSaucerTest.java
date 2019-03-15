@@ -56,7 +56,7 @@ public class FlyingSaucerTest {
 
         // Flying Saucer needs XHTML - not just normal HTML. To make our life
         // easy, we use JTidy to convert the rendered Thymeleaf template to
-        // XHTML. Note that this might no work for very complicated HTML. But
+        // XHTML. Note that this might not work for very complicated HTML. But
         // it's good enough for a simple letter.
         String renderedHtmlContent = templateEngine.process("template", context);
         String xHtml = convertToXhtml(renderedHtmlContent);
